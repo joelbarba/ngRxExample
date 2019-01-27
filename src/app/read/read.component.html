@@ -1,0 +1,21 @@
+<div class="left">
+  <div> <label>Username:   </label>  <input type="text" #username>   </div>
+  <div> <label>Email:      </label>  <input type="text" #email>      </div>
+  <div> <label>First Name: </label>  <input type="text" #first_name> </div>
+  <div> <label>Last Name:  </label>  <input type="text" #last_name>  </div>
+  <button (click)="addUser(username.value, email.value, first_name.value, last_name.value)">Add New User</button>
+</div>
+
+<div class="right">
+  <h3>Users</h3>
+  <ul>
+    <li *ngFor="let user of usersList$ | async; let ind = index">
+      <span>{{user.username}}</span>
+      <span> - {{user.email}} ({{user.first_name + ' ' + user.last_name}}) -----> </span>
+      <span (click)="updateUser(user)">UPD</span>
+      <span> -- </span>
+      <span (click)="deleteUser(user)">DEL</span>
+    </li>
+  </ul>
+
+</div>
