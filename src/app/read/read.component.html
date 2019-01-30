@@ -8,6 +8,7 @@
 
 <div class="right">
   <h3>Users</h3>
+  <h4>Status = {{usersStatus$ | async }}</h4>
   <ul>
     <li *ngFor="let user of usersList$ | async; let ind = index">
       <span>{{user.username}}</span>
@@ -18,4 +19,8 @@
     </li>
   </ul>
 
+</div>
+
+<div>
+  <button (click)="loadData()">Reload Users</button>
 </div>

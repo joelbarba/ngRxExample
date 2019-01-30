@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-export const ADD_USER     = '[USER] Add';
-export const UPDATE_USER  = '[USER] Update';
-export const REMOVE_USER  = '[USER] Remove';
+export const LOAD_USERS     = '[USER] Get';
+export const LOAD_USERS_OK  = '[USER] Get Ok';
+export const ADD_USER       = '[USER] Add';
+export const UPDATE_USER    = '[USER] Update';
+export const REMOVE_USER    = '[USER] Remove';
+
+export class LoadUsers implements Action {
+  readonly type = LOAD_USERS;
+  constructor(public payload: {}) {}
+}
+
+export class LoadUsersOk implements Action {
+  readonly type = LOAD_USERS_OK;
+  constructor(public payload: any) { }
+}
 
 export class AddUser implements Action {
   readonly type = ADD_USER;
@@ -28,7 +40,7 @@ export class RemoveUser implements Action {
   readonly type = REMOVE_USER;
   constructor(public payload: { id: string }) {}
 }
-export type Actions = AddUser | UpdateUser | RemoveUser;
+export type Actions = AddUser | UpdateUser | RemoveUser | LoadUsers | LoadUsersOk;
 
 
 

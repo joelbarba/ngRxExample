@@ -19,12 +19,19 @@ export interface Users {
 const initialUsers: Users = {
   list   : [],
   count  : 0,
-  status : 2
+  status : 0
 };
 
 // Reducer
 export function userReducer(state: Users = initialUsers, action: UserActions.Actions) {
   switch (action.type) {
+
+    case UserActions.LOAD_USERS:
+          return { ...state, status: 1 };
+
+    case UserActions.LOAD_USERS_OK:
+        console.log('LOAD_USERS_OK', action);
+          return { list: action.payload.users, count: action.payload.users.length, status: 2 };
 
     case UserActions.ADD_USER:
           const newState = { ...state };
@@ -56,41 +63,7 @@ export function userReducer(state: Users = initialUsers, action: UserActions.Act
 
 export function metaReducer(reducer) {
   return function (state, action) {
-    console.log('This is the meta reducer', state);
+    // console.log('This is the meta reducer', state);
     return reducer(state, action);
   };
 }
-
-// Initial State
-// const initialState: Tutorial = {
-//   name: 'Initial Tutorial',
-//   url: 'http://google.com'
-// };
-
-// Reducer
-// export function reducer(state: Tutorial[] = [initialState], action: TutorialActions.Actions) {
-//   switch (action.type) {
-
-//     case TutorialActions.ADD_TUTORIAL:
-//           console.log('The state is: ', [...state, action.payload]);
-//           return [...state, action.payload];
-
-//     case TutorialActions.REMOVE_TUTORIAL:
-//           state.splice(action.payload, 1);
-//           console.log('The state is: ', state);
-//           return state;
-
-//     default: return state;
-//   }
-// }
-
-// export function clearState(reducer) {
-//   return function (state, action) {
-
-//     if (action.type === TutorialActions.LOGOUT) {
-//       state = undefined;
-//     }
-
-//     return reducer(state, action);
-//   };
-// }

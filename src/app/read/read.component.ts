@@ -4,6 +4,7 @@ import { User, Users } from '../ngStore/user.reducer';
 import * as UserActions from '../ngStore/user.actions';
 import * as Rx from 'rxjs';
 import * as RxOp from 'rxjs/operators';
+import { FakeRequestService } from '../fake-request.service';
 
 
 @Component({
@@ -16,26 +17,35 @@ export class ReadComponent implements OnInit {
   // Observable to display in the view
   // tutorials: Rx.Observable<Tutorial[]>;
   usersList$: Rx.Observable<User[]>;
+  usersStatus$: Rx.Observable<string>;  // 0:Empty, 1=Loading, 2=Loaded, 3=Error
 
-  constructor(private store: Store<Users>) {
-    // Subscribe to the 'tutorial' model of the Store
-    // this.tutorials = store.select('tutorial');
+  constructor(private store: Store<Users>, private fakeRequest: FakeRequestService) {
+
     this.usersList$ = store.select('users').pipe(
+      RxOp.tap((data) => { console.log('Event from observable', data); }),
       RxOp.map(users => users.list )
     );
+    this.usersStatus$ = store.select('users').pipe(
+      RxOp.map(state => {
+        switch (state.status) {
+          case 0: return 'empty';
+          case 1: return 'loading';
+          case 2: return 'ready';
+          default: return 'error';
+        }
+      })
+    );
+    this.usersStatus$.subscribe((val) => {
+      console.log('changing status', val);
+    });
   }
 
   ngOnInit() {
-    this.store.dispatch(
-      new UserActions.AddUser({ username: 'joel.barba', email: 'joel@barba.com', first_name: 'Joel', last_name: 'Barba'})
-    );
-    this.store.dispatch(
-      new UserActions.AddUser({ username: 'denethor', email: 'denethor@barba.com', first_name: 'Syrax', last_name: 'Targaryen' })
-    );
-    this.store.dispatch(
-      new UserActions.AddUser({ username: 'denethor2', email: 'denethor2@barba.com', first_name: 'Syrax', last_name: 'Targaryen' })
-    );
+    this.loadData();
+  }
 
+  loadData() {
+    this.store.dispatch(new UserActions.LoadUsers({}));
   }
 
   addUser(username, email, first_name, last_name) {
